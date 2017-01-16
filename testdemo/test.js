@@ -1,0 +1,1 @@
+log(factorial(4))
