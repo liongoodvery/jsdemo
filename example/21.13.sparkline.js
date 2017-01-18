@@ -19,10 +19,10 @@
  *   and data-ymax attributes if they are defined, and otherwise come from
  *   the minimum and maximum values of the data.
  */
-onLoad(function() {   // When the document firsts loads
-    // Find all elements of class "sparkline"
+onLoad(function () {   // When the document firsts loads
+                       // Find all elements of class "sparkline"
     var elts = document.getElementsByClassName("sparkline");
-    main: for(var e = 0; e < elts.length; e++) { // For each element
+    main: for (var e = 0; e < elts.length; e++) { // For each element
         var elt = elts[e];
 
         // Get content of the element and convert to an array of numbers.
@@ -32,7 +32,7 @@ onLoad(function() {   // When the document firsts loads
         var text = content.replace(/#.*$/gm, "");  // Strip comments
         text = text.replace(/[\n\r\t\v\f]/g, " "); // Convert \n etc, to space
         var data = text.split(/\s+|\s*,\s*/);      // Split on space or comma
-        for(var i = 0; i < data.length; i++) {     // For each chunk
+        for (var i = 0; i < data.length; i++) {     // For each chunk
             data[i] = Number(data[i]);             // Convert to a number
             if (isNaN(data[i])) continue main;     // and abort on failure
         }
@@ -40,12 +40,12 @@ onLoad(function() {   // When the document firsts loads
         // Now compute the color, width, height, and y axis bounds of the 
         // sparkline from the data, from data- attributes of the element,
         // and from the computed style of the element.
-        var style = getComputedStyle(elt, null); 
+        var style = getComputedStyle(elt, null);
         var color = style.color;
         var height = parseInt(elt.getAttribute("data-height")) ||
             parseInt(style.fontSize) || 20;
         var width = parseInt(elt.getAttribute("data-width")) ||
-            data.length * (parseInt(elt.getAttribute("data-dx")) || height/6);
+            data.length * (parseInt(elt.getAttribute("data-dx")) || height / 6);
         var ymin = parseInt(elt.getAttribute("data-ymin")) ||
             Math.min.apply(Math, data);
         var ymax = parseInt(elt.getAttribute("data-ymax")) ||
@@ -53,7 +53,7 @@ onLoad(function() {   // When the document firsts loads
         if (ymin >= ymax) ymax = ymin + 1;
 
         // Create the canvas element.
-        var canvas = document.createElement("canvas"); 
+        var canvas = document.createElement("canvas");
         canvas.width = width;     // Set canvas dimensions
         canvas.height = height;
         canvas.title = content;   // Use the element content as a tooltip
@@ -62,10 +62,10 @@ onLoad(function() {   // When the document firsts loads
 
         // Now plot the points (i,data[i]), transforming to canvas coordinates.
         var context = canvas.getContext('2d');
-        for(var i = 0; i < data.length; i++) {          // For each data point
-            var x = width*i/data.length;                // Scale i
-            var y = (ymax-data[i])*height/(ymax-ymin);  // Scale data[i]
-            context.lineTo(x,y); // First lineTo() does a moveTo() instead
+        for (var i = 0; i < data.length; i++) {          // For each data point
+            var x = width * i / data.length;                // Scale i
+            var y = (ymax - data[i]) * height / (ymax - ymin);  // Scale data[i]
+            context.lineTo(x, y); // First lineTo() does a moveTo() instead
         }
         context.strokeStyle = color;   // Specify the color of the sparkline
         context.stroke();              // and draw it

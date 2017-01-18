@@ -5,7 +5,7 @@
 // Make an asynchronous HTTP GET request for the specified URL and pass the
 // HTTP status, headers and response body to the specified callback function.
 // Notice how we export this method through the exports object.
-exports.get = function(url, callback) {  
+exports.get = function (url, callback) {
     // Parse the URL and get the pieces we need from it
     url = require('url').parse(url);
     var hostname = url.hostname, port = url.port || 80;
@@ -14,27 +14,29 @@ exports.get = function(url, callback) {
 
     // Make a simple GET request
     var client = require("http").createClient(port, hostname);
-    var request = client.request("GET", path, { 
+    var request = client.request("GET", path, {
         "Host": hostname    // Request headers
-    }); 
+    });
     request.end();
 
     // A function to handle the response when it starts to arrive
-    request.on("response", function(response) {
+    request.on("response", function (response) {
         // Set an encoding so the body is returned as text, not bytes
         response.setEncoding("utf8");
         // Save the response body as it arrives
         var body = ""
-        response.on("data", function(chunk) { body += chunk; });
+        response.on("data", function (chunk) {
+            body += chunk;
+        });
         // When response is complete, call the callback
-        response.on("end", function() {
+        response.on("end", function () {
             if (callback) callback(response.statusCode, response.headers, body);
         });
     });
 };
 
 // Simple HTTP POST request with data as the request body
-exports.post = function(url, data, callback) {
+exports.post = function (url, data, callback) {
     // Parse the URL and get the pieces we need from it
     url = require('url').parse(url);
     var hostname = url.hostname, port = url.port || 80;
@@ -56,16 +58,18 @@ exports.post = function(url, data, callback) {
     // Make a POST request, including a request body
     var client = require("http").createClient(port, hostname);
     var request = client.request("POST", path, {
-        "Host": hostname,       
+        "Host": hostname,
         "Content-Type": type
     });
     request.write(data);                        // Send request body
-    request.end();       
-    request.on("response", function(response) { // Handle the response
+    request.end();
+    request.on("response", function (response) { // Handle the response
         response.setEncoding("utf8");           // Assume it is text
         var body = ""                           // To save the response body
-        response.on("data", function(chunk) { body += chunk; });
-        response.on("end", function() {         // When done, call the callback
+        response.on("data", function (chunk) {
+            body += chunk;
+        });
+        response.on("end", function () {         // When done, call the callback
             if (callback) callback(response.statusCode, response.headers, body);
         });
     });

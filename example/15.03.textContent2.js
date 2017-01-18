@@ -2,7 +2,7 @@
 // This method works like the textContent property
 function textContent(e) {
     var child, type, s = "";  // s holds the text of all children
-    for(child = e.firstChild; child != null; child = child.nextSibling) {
+    for (child = e.firstChild; child != null; child = child.nextSibling) {
         type = child.nodeType;
         if (type === 3 || type === 4)  // Text and CDATASection nodes
             s += child.nodeValue;

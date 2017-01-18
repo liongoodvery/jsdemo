@@ -32,7 +32,7 @@ function enclose(content, framewidth, frameheight, contentX, contentY) {
 
     // We'll need to work around some browser-specific quirks below
     var isMacWebkit = (navigator.userAgent.indexOf("Macintosh") !== -1 &&
-                       navigator.userAgent.indexOf("WebKit") !== -1);
+    navigator.userAgent.indexOf("WebKit") !== -1);
     var isFirefox = (navigator.userAgent.indexOf("Gecko") !== -1);
 
     // Register mousewheel event handlers.
@@ -51,15 +51,15 @@ function enclose(content, framewidth, frameheight, contentX, contentY) {
         // If future browsers fire both "wheel" and "mousewheel" for the same
         // event, we'll end up double-counting it here. Hopefully, however,
         // cancelling the wheel event will prevent generation of mousewheel.
-        var deltaX = e.deltaX*-30 ||  // wheel event
-                  e.wheelDeltaX/4 ||  // mousewheel
-                                0;    // property not defined
-        var deltaY = e.deltaY*-30 ||  // wheel event
-                  e.wheelDeltaY/4 ||  // mousewheel event in Webkit
-   (e.wheelDeltaY===undefined &&      // if there is no 2D property then 
-                  e.wheelDelta/4) ||  // use the 1D wheel property
-                     e.detail*-10 ||  // Firefox DOMMouseScroll event
-                               0;     // property not defined
+        var deltaX = e.deltaX * -30 ||  // wheel event
+            e.wheelDeltaX / 4 ||  // mousewheel
+            0;    // property not defined
+        var deltaY = e.deltaY * -30 ||  // wheel event
+            e.wheelDeltaY / 4 ||  // mousewheel event in Webkit
+            (e.wheelDeltaY === undefined &&      // if there is no 2D property then
+            e.wheelDelta / 4) ||  // use the 1D wheel property
+            e.detail * -10 ||  // Firefox DOMMouseScroll event
+            0;     // property not defined
 
         // Most browsers generate one event with delta 120 per mousewheel click.
         // On Macs, however, the mousewheels seem to be velocity-sensitive and
@@ -84,20 +84,20 @@ function enclose(content, framewidth, frameheight, contentX, contentY) {
             if (deltaX) {
                 framewidth -= deltaX; // New width, but not bigger than the
                 framewidth = Math.min(framwidth, contentwidth);  // content
-                framewidth = Math.max(framewidth,50);   // and no less than 50.
+                framewidth = Math.max(framewidth, 50);   // and no less than 50.
                 frame.style.width = framewidth + "px";  // Set it on frame
             }
             if (deltaY) {
                 frameheight -= deltaY;  // Do the same for the frame height
                 frameheight = Math.min(frameheight, contentheight);
-                frameheight = Math.max(frameheight-deltaY, 50);
+                frameheight = Math.max(frameheight - deltaY, 50);
                 frame.style.height = frameheight + "px";
             }
         }
         else { // Without the Alt modifier, pan the content within the frame
             if (deltaX) {
                 // Don't scroll more than this
-                var minoffset = Math.min(framewidth-contentwidth, 0);
+                var minoffset = Math.min(framewidth - contentwidth, 0);
                 // Add deltaX to contentX, but don't go lower than minoffset
                 contentX = Math.max(contentX + deltaX, minoffset);
                 contentX = Math.min(contentX, 0);     // or higher than 0

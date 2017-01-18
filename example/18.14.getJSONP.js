@@ -5,7 +5,7 @@ function getJSONP(url, callback) {
     // Create a unique callback name just for this request
     var cbnum = "cb" + getJSONP.counter++; // Increment counter each time
     var cbname = "getJSONP." + cbnum;      // As a property of this function
-    
+
     // Add the callback name to the url query string using form-encoding
     // We use the parameter name "jsonp".  Some JSONP-enabled services 
     // may require a different parameter name, such as "callback".
@@ -18,7 +18,7 @@ function getJSONP(url, callback) {
     var script = document.createElement("script");
 
     // Define the callback function that will be invoked by the script
-    getJSONP[cbnum] = function(response) {
+    getJSONP[cbnum] = function (response) {
         try {
             callback(response); // Handle the response data
         }

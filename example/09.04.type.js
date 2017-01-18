@@ -34,11 +34,11 @@ function type(o) {
 
 // Return the class of an object.
 function classof(o) {
-    return Object.prototype.toString.call(o).slice(8,-1);
+    return Object.prototype.toString.call(o).slice(8, -1);
 };
-    
+
 // Return the name of a function (may be "") or null for nonfunctions
-Function.prototype.getName = function() {
+Function.prototype.getName = function () {
     if ("name" in this) return this.name;
     return this.name = this.toString().match(/function\s*([^(]*)\(/)[1];
 };

@@ -25,13 +25,13 @@ whenReady(function () {  // Run this function when the document is loaded
     // Find all <input> elements
     var inputelts = document.getElementsByTagName("input");
     // Loop through them all
-    for(var i = 0 ; i < inputelts.length; i++) {
+    for (var i = 0; i < inputelts.length; i++) {
         var elt = inputelts[i];
         // Skip those that aren't text fields or that don't have
         // a data-allowed-chars attribute.
         if (elt.type != "text" || !elt.getAttribute("data-allowed-chars"))
             continue;
-        
+
         // Register our event handler function on this input element
         // keypress is a legacy event handler that works everywhere.
         // textInput (mixed-case) is supported by Safari and Chrome in 2010.
@@ -42,7 +42,7 @@ whenReady(function () {  // Run this function when the document is loaded
             elt.addEventListener("textinput", filter, false);
         }
         else { // textinput not supported versions of IE w/o addEventListener()
-            elt.attachEvent("onkeypress", filter); 
+            elt.attachEvent("onkeypress", filter);
         }
     }
 
@@ -68,15 +68,15 @@ whenReady(function () {  // Run this function when the document is loaded
             // Convert character code into a string
             var text = String.fromCharCode(code);
         }
-        
+
         // Now look up information we need from this input element
         var allowed = target.getAttribute("data-allowed-chars"); // Legal chars
         var messageid = target.getAttribute("data-messageid");   // Message id
         if (messageid)  // If there is a message id, get the element
             var messageElement = document.getElementById(messageid);
-        
+
         // Loop through the characters of the input text
-        for(var i = 0; i < text.length; i++) {
+        for (var i = 0; i < text.length; i++) {
             var c = text.charAt(i);
             if (allowed.indexOf(c) == -1) { // Is this a disallowed character?
                 // Display the message element, if there is one

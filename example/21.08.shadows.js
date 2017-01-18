@@ -15,4 +15,4 @@ c.fillText("Hello World", 115, 225);    // Draw some text
 c.shadowOffsetX = c.shadowOffsetY = 20;
 c.shadowBlur = 10;
 c.fillStyle = "red";                    // Draw a solid red rectangle
-c.fillRect(50,25,200,65);               // that floats above the blue box
+c.fillRect(50, 25, 200, 65);               // that floats above the blue box

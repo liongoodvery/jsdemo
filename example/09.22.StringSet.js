@@ -9,30 +9,42 @@ function StringSet() {
 // writable, enumerable, and configurable properties, they all default to false.
 // Readonly methods makes this class trickier to subclass.
 StringSet.prototype = Object.create(AbstractWritableSet.prototype, {
-    constructor: { value: StringSet },
-    contains: { value: function(x) { return x in this.set; } },
-    size: { value: function(x) { return this.n; } },
-    foreach: { value: function(f,c) { Object.keys(this.set).forEach(f,c); } },
+    constructor: {value: StringSet},
+    contains: {
+        value: function (x) {
+            return x in this.set;
+        }
+    },
+    size: {
+        value: function (x) {
+            return this.n;
+        }
+    },
+    foreach: {
+        value: function (f, c) {
+            Object.keys(this.set).forEach(f, c);
+        }
+    },
     add: {
-        value: function() {
-            for(var i = 0; i < arguments.length; i++) {
+        value: function () {
+            for (var i = 0; i < arguments.length; i++) {
                 if (!(arguments[i] in this.set)) {
                     this.set[arguments[i]] = true;
                     this.n++;
                 }
             }
             return this;
-        } 
+        }
     },
     remove: {
-        value: function() {
-            for(var i = 0; i < arguments.length; i++) {
+        value: function () {
+            for (var i = 0; i < arguments.length; i++) {
                 if (arguments[i] in this.set) {
                     delete this.set[arguments[i]];
                     this.n--;
                 }
             }
             return this;
-        } 
+        }
     }
 });

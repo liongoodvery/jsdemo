@@ -15,6 +15,6 @@ function defineSubclass(superclass,  // Constructor of the superclass
 }
 
 // We can also do this as a method of the superclass constructor
-Function.prototype.extend = function(constructor, methods, statics) {
+Function.prototype.extend = function (constructor, methods, statics) {
     return defineSubclass(this, constructor, methods, statics);
 };

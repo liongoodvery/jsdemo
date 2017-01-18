@@ -4,12 +4,12 @@
  * and each one seems to have its own unique bugs. This code does not attempt
  * browser-specific workarounds.
  */
-whenReady(function() {  // Run this function when the document is ready
+whenReady(function () {  // Run this function when the document is ready
 
     // Find all <ul class='dnd'> elements and call the dnd() function on them
     var lists = document.getElementsByTagName("ul");
     var regexp = /\bdnd\b/;
-    for(var i = 0; i < lists.length; i++)
+    for (var i = 0; i < lists.length; i++)
         if (regexp.test(lists[i].className)) dnd(lists[i]);
 
     // Add drag-and-drop handlers to a list element
@@ -21,9 +21,9 @@ whenReady(function() {  // Run this function when the document is ready
         // that the drag contains data in a format it can process and, if so,
         // returns false to indicate interest in a drop. In that case, it also
         // highlights the drop target to let the user know of that interest.
-        list.ondragenter = function(e) {
+        list.ondragenter = function (e) {
             e = e || window.event;  // Standard or IE event
-            var from = e.relatedTarget; 
+            var from = e.relatedTarget;
 
             // dragenter and dragleave events bubble, which makes it tricky to
             // know when to highlight or unhighlight the element in a case like
@@ -37,7 +37,7 @@ whenReady(function() {  // Run this function when the document is ready
             if ((from && !ischild(from, list)) || entered == 1) {
 
                 // All the DnD info is in this dataTransfer object
-                var dt = e.dataTransfer; 
+                var dt = e.dataTransfer;
 
                 // The dt.types object lists the types or formats that the data
                 // being dragged is available in. HTML5 says the type has a
@@ -51,7 +51,7 @@ whenReady(function() {  // Run this function when the document is ready
                 // and return false to let the browser know.
                 if (!types ||                                           // IE
                     (types.contains && types.contains("text/plain")) || //HTML5
-                    (types.indexOf && types.indexOf("text/plain")!=-1)) //Webkit 
+                    (types.indexOf && types.indexOf("text/plain") != -1)) //Webkit
                 {
                     list.className = original_class + " droppable";
                     return false;
@@ -65,19 +65,21 @@ whenReady(function() {  // Run this function when the document is ready
         // This handler is invoked as the mouse moves over the list.
         // We have to define this handler and return false or the drag
         // will be canceled.
-        list.ondragover = function(e) { return false; };
+        list.ondragover = function (e) {
+            return false;
+        };
 
         // This handler is invoked when the drag moves out of the list
         // or out of one of its children. If we are actually leaving the list
         // (not just going from one list item to another), then unhighlight it.
-        list.ondragleave = function(e) {
+        list.ondragleave = function (e) {
             e = e || window.event;
             var to = e.relatedTarget;
 
             // If we're leaving for something outside the list or if this leave
             // balances out the enters, then unhighlight the list
             entered--;
-            if ((to && !ischild(to,list)) || entered <= 0) {
+            if ((to && !ischild(to, list)) || entered <= 0) {
                 list.className = original_class;
                 entered = 0;
             }
@@ -86,7 +88,7 @@ whenReady(function() {  // Run this function when the document is ready
 
         // This handler is invoked when a drop actually happens.
         // We take the dropped text and make it into a new <li> element
-        list.ondrop = function(e) {
+        list.ondrop = function (e) {
             e = e || window.event;       // Get the event
 
             // Get the data that was dropped in plain text format.
@@ -112,7 +114,7 @@ whenReady(function() {  // Run this function when the document is ready
 
         // Make all items that were originally in the list draggable
         var items = list.getElementsByTagName("li");
-        for(var i = 0; i < items.length; i++)
+        for (var i = 0; i < items.length; i++)
             items[i].draggable = true;
 
         // And register event handlers for dragging list items.
@@ -120,7 +122,7 @@ whenReady(function() {  // Run this function when the document is ready
         // bubble up from the items.
 
         // This handler is invoked when a drag is initiated within the list.
-        list.ondragstart = function(e) {
+        list.ondragstart = function (e) {
             var e = e || window.event;
             var target = e.target || e.srcElement;
             // If it bubbled up from something other than a <li>, ignore it
@@ -134,7 +136,7 @@ whenReady(function() {  // Run this function when the document is ready
         };
 
         // This handler is invoked after a successful drop occurs
-        list.ondragend = function(e) {
+        list.ondragend = function (e) {
             e = e || window.event;
             var target = e.target || e.srcElement;
 
@@ -149,8 +151,8 @@ whenReady(function() {  // Run this function when the document is ready
 
         // This is the utility function we used in ondragenter and ondragleave.
         // Return true if a is a child of b.
-        function ischild(a,b) {
-            for(; a; a = a.parentNode) if (a === b) return true;
+        function ischild(a, b) {
+            for (; a; a = a.parentNode) if (a === b) return true;
             return false;
         }
     }

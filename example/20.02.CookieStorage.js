@@ -6,17 +6,17 @@
 function CookieStorage(maxage, path) {  // Arguments specify lifetime and scope
 
     // Get an object that holds all cookies
-    var cookies = (function() { // The getCookies() function shown earlier
+    var cookies = (function () { // The getCookies() function shown earlier
         var cookies = {};           // The object we will return
         var all = document.cookie;  // Get all cookies in one big string
         if (all === "")             // If the property is the empty string
             return cookies;         // return an empty object
         var list = all.split("; "); // Split into individual name=value pairs
-        for(var i = 0; i < list.length; i++) {  // For each cookie
+        for (var i = 0; i < list.length; i++) {  // For each cookie
             var cookie = list[i];
             var p = cookie.indexOf("=");        // Find the first = sign
-            var name = cookie.substring(0,p);   // Get cookie name
-            var value = cookie.substring(p+1);  // Get cookie value
+            var name = cookie.substring(0, p);   // Get cookie name
+            var value = cookie.substring(p + 1);  // Get cookie value
             value = decodeURIComponent(value);  // Decode the value
             cookies[name] = value;              // Store name and value
         }
@@ -25,7 +25,7 @@ function CookieStorage(maxage, path) {  // Arguments specify lifetime and scope
 
     // Collect the cookie names in an array
     var keys = [];
-    for(var key in cookies) keys.push(key);
+    for (var key in cookies) keys.push(key);
 
     // Now define the public properties and methods of the Storage API
 
@@ -33,16 +33,18 @@ function CookieStorage(maxage, path) {  // Arguments specify lifetime and scope
     this.length = keys.length;
 
     // Return the name of the nth cookie, or null if n is out of range
-    this.key = function(n) {
+    this.key = function (n) {
         if (n < 0 || n >= keys.length) return null;
         return keys[n];
     };
 
     // Return the value of the named cookie, or null.
-    this.getItem = function(name) { return cookies[name] || null; };
+    this.getItem = function (name) {
+        return cookies[name] || null;
+    };
 
     // Store a value
-    this.setItem = function(key, value) {
+    this.setItem = function (key, value) {
         if (!(key in cookies)) { // If no existing cookie with this name
             keys.push(key);      // Add key to the array of keys
             this.length++;       // And increment the length
@@ -64,7 +66,7 @@ function CookieStorage(maxage, path) {  // Arguments specify lifetime and scope
     };
 
     // Remove the specified cookie
-    this.removeItem = function(key) {
+    this.removeItem = function (key) {
         if (!(key in cookies)) return;  // If it doesn't exist, do nothing
 
         // Delete the cookie from our internal set of cookies
@@ -72,9 +74,9 @@ function CookieStorage(maxage, path) {  // Arguments specify lifetime and scope
 
         // And remove the key from the array of names, too.
         // This would be easier with the ES5 array indexOf() method.
-        for(var i = 0; i < keys.length; i++) {  // Loop through all keys
+        for (var i = 0; i < keys.length; i++) {  // Loop through all keys
             if (keys[i] === key) {              // When we find the one we want
-                keys.splice(i,1);               // Remove it from the array.
+                keys.splice(i, 1);               // Remove it from the array.
                 break;
             }
         }
@@ -86,9 +88,9 @@ function CookieStorage(maxage, path) {  // Arguments specify lifetime and scope
     };
 
     // Remove all cookies
-    this.clear = function() {
+    this.clear = function () {
         // Loop through the keys, removing the cookies
-        for(var i = 0; i < keys.length; i++)
+        for (var i = 0; i < keys.length; i++)
             document.cookie = keys[i] + "=; max-age=0";
         // Reset our internal state
         cookies = {};

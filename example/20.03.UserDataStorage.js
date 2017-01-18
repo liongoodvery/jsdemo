@@ -1,4 +1,4 @@
-function UserDataStorage(maxage)  {
+function UserDataStorage(maxage) {
     // Create a document element and install the special userData 
     // behavior on it so it gets save() and load() methods.
     var memory = document.createElement("div");         // Create an element
@@ -17,14 +17,14 @@ function UserDataStorage(maxage)  {
     // The argument is arbitrary, but must also be passed to save()
     memory.load("UserDataStorage");                     // Load any stored data
 
-    this.getItem = function(key) {     // Retrieve saved values from attributes
+    this.getItem = function (key) {     // Retrieve saved values from attributes
         return memory.getAttribute(key) || null;
     };
-    this.setItem = function(key, value) {
-        memory.setAttribute(key,value); // Store values as attributes
+    this.setItem = function (key, value) {
+        memory.setAttribute(key, value); // Store values as attributes
         memory.save("UserDataStorage"); // Save state after any change
     };
-    this.removeItem = function(key) {
+    this.removeItem = function (key) {
         memory.removeAttribute(key);    // Remove stored value attribute
         memory.save("UserDataStorage"); // Save new state
     };

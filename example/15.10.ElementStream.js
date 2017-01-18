@@ -6,17 +6,17 @@ function ElementStream(elt) {
 }
 
 // Concatenate all arguments and append to the buffer
-ElementStream.prototype.write = function() {
+ElementStream.prototype.write = function () {
     this.buffer += Array.prototype.join.call(arguments, "");
 };
 
 // Just like write(), but add a newline
-ElementStream.prototype.writeln = function() {
+ElementStream.prototype.writeln = function () {
     this.buffer += Array.prototype.join.call(arguments, "") + "\n";
 };
 
 // Set element content from buffer and empty the buffer.
-ElementStream.prototype.close = function() {
+ElementStream.prototype.close = function () {
     this.elt.innerHTML = this.buffer;
     this.buffer = "";
 };

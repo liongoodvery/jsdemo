@@ -7,7 +7,7 @@
  *   colors: an array of HTML color strings, one for each wedge
  *   labels: an array of labels to appear in the legend, one for each wedge
  *   lx, ly: the upper-left corner of the chart legend
- * Returns: 
+ * Returns:
  *    An <svg> element that holds the pie chart.
  *    The caller must insert the returned element into the document.
  */
@@ -21,15 +21,15 @@ function pieChart(data, width, height, cx, cy, r, colors, labels, lx, ly) {
 
     // Add up the data values so we know how big the pie is
     var total = 0;
-    for(var i = 0; i < data.length; i++) total += data[i];
-    
+    for (var i = 0; i < data.length; i++) total += data[i];
+
     // Now figure out how big each slice of pie is. Angles in radians.
     var angles = []
-    for(var i = 0; i < data.length; i++) angles[i] = data[i]/total*Math.PI*2;
+    for (var i = 0; i < data.length; i++) angles[i] = data[i] / total * Math.PI * 2;
 
     // Loop through each slice of pie.
     startangle = 0;
-    for(var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
         // This is where the wedge ends
         var endangle = startangle + angles[i];
 
@@ -40,16 +40,16 @@ function pieChart(data, width, height, cx, cy, r, colors, labels, lx, ly) {
         var y1 = cy - r * Math.cos(startangle);
         var x2 = cx + r * Math.sin(endangle);
         var y2 = cy - r * Math.cos(endangle);
-        
+
         // This is a flag for angles larger than than a half circle
         // It is required by the SVG arc drawing component
         var big = 0;
         if (endangle - startangle > Math.PI) big = 1;
-        
+
         // We describe a wedge with an <svg:path> element
         // Notice that we create this with createElementNS()
         var path = document.createElementNS(svgns, "path");
-        
+
         // This string holds the path details
         var d = "M " + cx + "," + cy +  // Start at circle center
             " L " + x1 + "," + y1 +     // Draw line to (x1,y1)
@@ -71,7 +71,7 @@ function pieChart(data, width, height, cx, cy, r, colors, labels, lx, ly) {
         // Now draw a little matching square for the key
         var icon = document.createElementNS(svgns, "rect");
         icon.setAttribute("x", lx);             // Position the square
-        icon.setAttribute("y", ly + 30*i);
+        icon.setAttribute("y", ly + 30 * i);
         icon.setAttribute("width", 20);         // Size the square
         icon.setAttribute("height", 20);
         icon.setAttribute("fill", colors[i]);   // Same fill color as wedge
@@ -82,7 +82,7 @@ function pieChart(data, width, height, cx, cy, r, colors, labels, lx, ly) {
         // And add a label to the right of the rectangle
         var label = document.createElementNS(svgns, "text");
         label.setAttribute("x", lx + 30);       // Position the text
-        label.setAttribute("y", ly + 30*i + 18);
+        label.setAttribute("y", ly + 30 * i + 18);
         // Text style attributes could also be set via CSS
         label.setAttribute("font-family", "sans-serif");
         label.setAttribute("font-size", "16");

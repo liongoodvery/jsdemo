@@ -22,13 +22,13 @@ function getmap() {
 
         // Construct a URL for a static Google map image of this location
         var url = "http://maps.google.com/maps/api/staticmap" +
-            "?center=" + latitude + "," + longitude + 
+            "?center=" + latitude + "," + longitude +
             "&size=640x640&sensor=true";
-        
+
         // Set the map zoom level using a rough heuristic
-        var zoomlevel=20;     // Start zoomed in almost all the way
+        var zoomlevel = 20;     // Start zoomed in almost all the way
         if (accuracy > 80)    // Zoom out for less accurate positions
-            zoomlevel -= Math.round(Math.log(accuracy/50)/Math.LN2);
+            zoomlevel -= Math.round(Math.log(accuracy / 50) / Math.LN2);
         url += "&zoom=" + zoomlevel;  // Add zoom level to the URL
 
         // Now display the map in the image object. Thanks, Google!

@@ -16,8 +16,8 @@ function whereami(elt) {
     };
 
     if (navigator.geolocation) // Request position, if supported
-        navigator.geolocation.getCurrentPosition(success, error, options); 
-    else 
+        navigator.geolocation.getCurrentPosition(success, error, options);
+    else
         elt.innerHTMl = "Geolocation not supported in this browser";
 
     // This function will be invoked if geolocation fails
@@ -34,9 +34,9 @@ function whereami(elt) {
         // These are the fields that we always get. Note that the timestamp
         // is in the outer object, not the inner, coords object.
         var msg = "At " +
-            new Date(pos.timestamp).toLocaleString() + " you were within " + 
+            new Date(pos.timestamp).toLocaleString() + " you were within " +
             pos.coords.accuracy + " meters of latitude " +
-            pos.coords.latitude + " longitude " + 
+            pos.coords.latitude + " longitude " +
             pos.coords.longitude + ".";
 
         // If our device returns altitude, add that information.
@@ -44,10 +44,10 @@ function whereami(elt) {
             msg += " You are " + pos.coords.altitude + " ± " +
                 pos.coords.altitudeAccuracy + "meters above sea level.";
         }
-        
+
         // if our device returns speed and heading, add that, too.
         if (pos.coords.speed) {
-            msg += " You are travelling at " + 
+            msg += " You are travelling at " +
                 pos.coords.speed + "m/s on heading " +
                 pos.coords.heading + ".";
         }

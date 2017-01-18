@@ -3,7 +3,7 @@
 // use moves the mouse over them, the gadget searches for the link's URL.
 // This allows the user to see what people are tweeting about the link
 // destination before clicking on it.
-window.addEventListener("load", function() {       // Won't work in IE < 9
+window.addEventListener("load", function () {       // Won't work in IE < 9
     var origin = "http://davidflanagan.com";       // Gadget origin
     var gadget = "/demos/TwitterSearch.html";      // Gadget path
     var iframe = document.createElement("iframe"); // Create the iframe
@@ -14,12 +14,12 @@ window.addEventListener("load", function() {       // Won't work in IE < 9
 
     // Insert the iframe at the start of the document
     document.body.insertBefore(iframe, document.body.firstChild);
-    
+
     // Now find all links and hook them up to the gadget
     var links = document.getElementsByTagName("a");
-    for(var i = 0; i < links.length; i++) {
+    for (var i = 0; i < links.length; i++) {
         // addEventListener doesn't work in IE8 and before
-        links[i].addEventListener("mouseover", function() {
+        links[i].addEventListener("mouseover", function () {
             // Send the url as the search term, and only deliver it if the
             // iframe is still displaying a document from davidflanagan.com
             iframe.contentWindow.postMessage(this.href, origin);

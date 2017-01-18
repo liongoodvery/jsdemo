@@ -13,7 +13,7 @@ var ws = require('websocket-server');  // Use an external WebSocket library
 var clientui = require('fs').readFileSync("wschatclient.html");
 
 // Create an HTTP server
-var httpserver = new http.Server();  
+var httpserver = new http.Server();
 
 // When the HTTP server gets a new request, run this function
 httpserver.on("request", function (request, response) {
@@ -33,9 +33,9 @@ httpserver.on("request", function (request, response) {
 var wsserver = ws.createServer({server: httpserver});
 
 // Call this function when we receive a new connection request
-wsserver.on("connection", function(socket) {
+wsserver.on("connection", function (socket) {
     socket.send("Welcome to the chat room."); // Greet the new client
-    socket.on("message", function(msg) {      // Listen for msgs from the client
+    socket.on("message", function (msg) {      // Listen for msgs from the client
         wsserver.broadcast(msg);              // And broadcast them to everyone
     });
 });

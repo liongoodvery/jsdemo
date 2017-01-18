@@ -5,7 +5,7 @@
 function encodeFormData(data) {
     if (!data) return "";    // Always return a string
     var pairs = [];          // To hold name=value pairs
-    for(var name in data) {                                  // For each name
+    for (var name in data) {                                  // For each name
         if (!data.hasOwnProperty(name)) continue;            // Skip inherited
         if (typeof data[name] === "function") continue;      // Skip methods
         var value = data[name].toString();                   // Value as string

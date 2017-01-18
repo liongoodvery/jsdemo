@@ -16,7 +16,9 @@ function invoke(f, start, interval, end) {
         function repeat() {         // Invoked by the timeout above
             var h = setInterval(f, interval); // Invoke f every interval ms.
             // And stop invoking after end ms, if end is defined
-            if (end) setTimeout(function() { clearInterval(h); }, end);
+            if (end) setTimeout(function () {
+                clearInterval(h);
+            }, end);
         }
     }
 }

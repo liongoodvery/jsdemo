@@ -9,13 +9,13 @@ function timedGetText(url, timeout, callback) {
     var request = new XMLHttpRequest();         // Create new request.
     var timedout = false;                       // Whether we timed out or not.
     // Start a timer that will abort the request after timeout ms.
-    var timer = setTimeout(function() {         // Start a timer. If triggered,
-                               timedout = true; // set a flag and then
-                               request.abort(); // abort the request.
-                           },
-                           timeout);            // How long before we do this
+    var timer = setTimeout(function () {         // Start a timer. If triggered,
+            timedout = true; // set a flag and then
+            request.abort(); // abort the request.
+        },
+        timeout);            // How long before we do this
     request.open("GET", url);                   // Specify URL to fetch
-    request.onreadystatechange = function() {   // Define event listener.
+    request.onreadystatechange = function () {   // Define event listener.
         if (request.readyState !== 4) return;   // Ignore incomplete requests.
         if (timedout) return;                   // Ignore aborted requests.
         clearTimeout(timer);                    // Cancel pending timeout.

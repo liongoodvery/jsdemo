@@ -25,7 +25,7 @@ server.on("request", function (request, response) {
         // Start writing the response body right away
         response.write("Sleeping for " + delay + " milliseconds...");
         // And then finish it in another function invoked later.
-        setTimeout(function() { 
+        setTimeout(function () {
             response.write("done.");
             response.end();
         }, delay);
@@ -36,48 +36,65 @@ server.on("request", function (request, response) {
         // Response status and headers
         response.writeHead(200, {"Content-Type": "text/plain; charset=UTF-8"});
         // Begin the response body with the request 
-        response.write(request.method + " " + request.url + 
-                       " HTTP/" + request.httpVersion + "\r\n");
+        response.write(request.method + " " + request.url +
+            " HTTP/" + request.httpVersion + "\r\n");
         // And the request headers
-        for(var h in request.headers) {
+        for (var h in request.headers) {
             response.write(h + ": " + request.headers[h] + "\r\n");
         }
         response.write("\r\n");  // End headers with an extra blank line
 
         // We complete the response in these event handler functions:
         // When a chunk of the request body, add it to the response.
-        request.on("data", function(chunk) { response.write(chunk); });
+        request.on("data", function (chunk) {
+            response.write(chunk);
+        });
         // When the request ends, the response is done, too.
-        request.on("end", function(chunk) { response.end(); });
+        request.on("end", function (chunk) {
+            response.end();
+        });
     }
     // Otherwise, serve a file from the local directory.
     else {
         // Get local filename and guess its content type based on its extension.
         var filename = url.pathname.substring(1); // strip leading /
-        var type;  
-        switch(filename.substring(filename.lastIndexOf(".")+1))  { // extension
-        case "html":
-        case "htm":      type = "text/html; charset=UTF-8"; break;
-        case "js":       type = "application/javascript; charset=UTF-8"; break;
-        case "css":      type = "text/css; charset=UTF-8"; break;
-        case "txt" :     type = "text/plain; charset=UTF-8"; break;
-        case "manifest": type = "text/cache-manifest; charset=UTF-8"; break;
-        default:         type = "application/octet-stream"; break;
+        var type;
+        switch (filename.substring(filename.lastIndexOf(".") + 1)) { // extension
+            case "html":
+            case "htm":
+                type = "text/html; charset=UTF-8";
+                break;
+            case "js":
+                type = "application/javascript; charset=UTF-8";
+                break;
+            case "css":
+                type = "text/css; charset=UTF-8";
+                break;
+            case "txt" :
+                type = "text/plain; charset=UTF-8";
+                break;
+            case "manifest":
+                type = "text/cache-manifest; charset=UTF-8";
+                break;
+            default:
+                type = "application/octet-stream";
+                break;
         }
-                
+
         // Read the file asynchronously and pass the content as a single
         // chunk to the callback function. For really large files, using the
         // streaming API with fs.createReadStream() would be better.
-        fs.readFile(filename, function(err, content) {
+        fs.readFile(filename, function (err, content) {
             if (err) {  // If we couldn't read the file for some reason
                 response.writeHead(404, {    // Send a 404 Not Found status
-                    "Content-Type": "text/plain; charset=UTF-8"});
+                    "Content-Type": "text/plain; charset=UTF-8"
+                });
                 response.write(err.message); // Simple error message body
                 response.end();              // Done
             }
             else {      // Otherwise, if the file was read successfully.
                 response.writeHead(200,  // Set the status code and MIME type
-                                   {"Content-Type": type});
+                    {"Content-Type": type});
                 response.write(content); // Send file contents as response body
                 response.end();          // And we're done
             }

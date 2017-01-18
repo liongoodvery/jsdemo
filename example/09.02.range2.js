@@ -14,18 +14,22 @@ function Range(from, to) {
 Range.prototype = {
     // Return true if x is in the range, false otherwise
     // This method works for textual and Date ranges as well as numeric.
-    includes: function(x) { return this.from <= x && x <= this.to; },
+    includes: function (x) {
+        return this.from <= x && x <= this.to;
+    },
     // Invoke f once for each integer in the range.
     // This method works only for numeric ranges.
-    foreach: function(f) {
-        for(var x = Math.ceil(this.from); x <= this.to; x++) f(x);
+    foreach: function (f) {
+        for (var x = Math.ceil(this.from); x <= this.to; x++) f(x);
     },
     // Return a string representation of the range
-    toString: function() { return "(" + this.from + "..." + this.to + ")"; }
+    toString: function () {
+        return "(" + this.from + "..." + this.to + ")";
+    }
 };
 
 // Here are example uses of a range object
-var r = new Range(1,3);   // Create a range object
+var r = new Range(1, 3);   // Create a range object
 r.includes(2);            // => true: 2 is in the range
 r.foreach(console.log);   // Prints 1 2 3
 console.log(r);           // Prints (1...3)

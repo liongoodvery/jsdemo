@@ -1,5 +1,5 @@
 // Filesystem utilities using the synchronous API in a worker thread
-var filesystem = requestFileSystemSync(PERSISTENT, 10*1024*1024);
+var filesystem = requestFileSystemSync(PERSISTENT, 10 * 1024 * 1024);
 
 function readTextFile(name) {
     // Get a File from a FileEntry from the root DirectoryEntry
@@ -10,7 +10,7 @@ function readTextFile(name) {
 
 function appendToFile(name, contents) {
     // Get a FileWriter from a FileEntry from the root DirectoryEntry
-    var writer = filesystem.root.getFile(name, {create:true}).createWriter();
+    var writer = filesystem.root.getFile(name, {create: true}).createWriter();
     writer.seek(writer.length);  // Start at the end of the file
     var bb = new BlobBuilder()   // Build the file contents into a Blob
     bb.append(contents);
@@ -22,29 +22,29 @@ function deleteFile(name) {
 }
 
 function makeDirectory(name) {
-    filesystem.root.getDirectory(name, { create: true, exclusive:true });
+    filesystem.root.getDirectory(name, {create: true, exclusive: true});
 }
 
 function listFiles(path) {
     var dir = filesystem.root;
     if (path) dir = dir.getDirectory(path);
-    
+
     var lister = dir.createReader();
     var list = [];
     do {
         var entries = lister.readEntries();
-        for(var i = 0; i < entries.length; i++) {
+        for (var i = 0; i < entries.length; i++) {
             var name = entries[i].name;
             if (entries[i].isDirectory) name += "/";
             list.push(name);
         }
-    } while(entries.length > 0);
+    } while (entries.length > 0);
 
     return list;
 }
 
 // Allow the main thread to use these utilities by sending a message
-onmessage = function(e) {
+onmessage = function (e) {
     // We expect the message to be an object like this:
     // { function: "appendToFile", args: ["test", "testing, testing"]}
     // We invoke the specified function with the specified args and

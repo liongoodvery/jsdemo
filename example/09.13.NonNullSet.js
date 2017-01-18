@@ -14,9 +14,9 @@ NonNullSet.prototype = inherit(Set.prototype);
 NonNullSet.prototype.constructor = NonNullSet;
 
 // To exclude null and undefined, we only have to override the add() method
-NonNullSet.prototype.add = function() {
+NonNullSet.prototype.add = function () {
     // Check for null or undefined arguments
-    for(var i = 0; i < arguments.length; i++)
+    for (var i = 0; i < arguments.length; i++)
         if (arguments[i] == null)
             throw new Error("Can't add null or undefined to a NonNullSet");
 

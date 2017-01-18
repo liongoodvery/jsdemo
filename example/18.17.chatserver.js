@@ -14,14 +14,14 @@ var clients = [];
 
 // Send a comment to the clients every 20 seconds so they don't 
 // close the connection and then reconnect
-setInterval(function() {
-    clients.forEach(function(client) {
+setInterval(function () {
+    clients.forEach(function (client) {
         client.write(":ping\n");
     });
 }, 20000);
 
 // Create a new server
-var server = new http.Server();  
+var server = new http.Server();
 
 // When the server gets a new request, run this function
 server.on("request", function (request, response) {
@@ -48,11 +48,13 @@ server.on("request", function (request, response) {
         request.setEncoding("utf8");
         var body = "";
         // When we get a chunk of data, add it to the body
-        request.on("data", function(chunk) { body += chunk; });
+        request.on("data", function (chunk) {
+            body += chunk;
+        });
 
         // When the request is done, send an empty response 
         // and broadcast the message to all listening clients.
-        request.on("end", function() {
+        request.on("end", function () {
             response.writeHead(200);   // Respond to the request
             response.end();
 
@@ -61,18 +63,20 @@ server.on("request", function (request, response) {
             // terminated with two newlines.
             message = 'data: ' + body.replace('\n', '\ndata: ') + "\r\n\r\n";
             // Now send this message to all listening clients
-            clients.forEach(function(client) { client.write(message); });
+            clients.forEach(function (client) {
+                client.write(message);
+            });
         });
     }
     // Otherwise, a client is requesting a stream of messages
     else {
         // Set the content type and send an initial message event 
-        response.writeHead(200, {'Content-Type': "text/event-stream" });
+        response.writeHead(200, {'Content-Type': "text/event-stream"});
         response.write("data: Connected\n\n");
 
         // If the client closes the connection, remove the corresponding
         // response object from the array of active clients
-        request.connection.on("end", function() {
+        request.connection.on("end", function () {
             clients.splice(clients.indexOf(response), 1);
             response.end();
         });

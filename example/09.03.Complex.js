@@ -25,32 +25,34 @@ function Complex(real, imaginary) {
  */
 
 // Add a complex number to this one and return the sum in a new object.
-Complex.prototype.add = function(that) {
+Complex.prototype.add = function (that) {
     return new Complex(this.r + that.r, this.i + that.i);
 };
 
 // Multiply this complex number by another and return the product.
-Complex.prototype.mul = function(that) {
+Complex.prototype.mul = function (that) {
     return new Complex(this.r * that.r - this.i * that.i,
-                       this.r * that.i + this.i * that.r);
+        this.r * that.i + this.i * that.r);
 };
 
 // Return the real magnitude of a complex number. This is defined
 // as its distance from the origin (0,0) of the complex plane.
-Complex.prototype.mag = function() {
-    return Math.sqrt(this.r*this.r + this.i*this.i);
+Complex.prototype.mag = function () {
+    return Math.sqrt(this.r * this.r + this.i * this.i);
 };
 
 // Return a complex number that is the negative of this one.
-Complex.prototype.neg = function() { return new Complex(-this.r, -this.i); };
+Complex.prototype.neg = function () {
+    return new Complex(-this.r, -this.i);
+};
 
 // Convert a Complex object to a string in a useful way.
-Complex.prototype.toString = function() {
+Complex.prototype.toString = function () {
     return "{" + this.r + "," + this.i + "}";
 };
 
 // Test whether this Complex object has the same value as another.
-Complex.prototype.equals = function(that) {
+Complex.prototype.equals = function (that) {
     return that != null &&                      // must be defined and non-null
         that.constructor === Complex &&         // and an instance of Complex 
         this.r === that.r && this.i === that.i; // and have the same values.
@@ -65,13 +67,13 @@ Complex.prototype.equals = function(that) {
 // Here are some class fields that hold useful predefined complex numbers.
 // Their names are uppercase to indicate that they are constants.
 // (In ECMAScript 5, we could actually make these properties read-only.)
-Complex.ZERO = new Complex(0,0);
-Complex.ONE = new Complex(1,0);
-Complex.I = new Complex(0,1);
+Complex.ZERO = new Complex(0, 0);
+Complex.ONE = new Complex(1, 0);
+Complex.I = new Complex(0, 1);
 
 // This class method parses a string in the format returned by the toString
 // instance method and returns a Complex object or throws a TypeError.
-Complex.parse = function(s) {
+Complex.parse = function (s) {
     try {          // Assume that the parsing will succeed
         var m = Complex._format.exec(s);  // Regular expression magic
         return new Complex(parseFloat(m[1]), parseFloat(m[2]));
@@ -83,4 +85,4 @@ Complex.parse = function(s) {
 // A "private" class field used in Complex.parse() above.
 // The underscore in its name indicates that it is intended for internal
 // use and should not be considered part of the public API of this class.
-Complex._format = /^\{([^,]+),([^}]+)\}$/;
+an

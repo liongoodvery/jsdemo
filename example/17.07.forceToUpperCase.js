@@ -4,7 +4,10 @@ function forceToUpperCase(element) {
     element.onpropertychange = upcaseOnPropertyChange;
 
     // Easy case: the handler for the input event
-    function upcase(event) { this.value = this.value.toUpperCase(); }
+    function upcase(event) {
+        this.value = this.value.toUpperCase();
+    }
+
     // Hard case: the handler for the propertychange event
     function upcaseOnPropertyChange(event) {
         var e = event || window.event;

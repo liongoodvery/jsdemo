@@ -1,5 +1,5 @@
 // Revert to the last saved graphics state, but don't pop the stack.
-CanvasRenderingContext2D.prototype.revert = function() {
+CanvasRenderingContext2D.prototype.revert = function () {
     this.restore();  // Restore the old graphics state.
     this.save();     // Save it again so we can go back to it.
     return this;     // Allow method chaining.
@@ -8,9 +8,9 @@ CanvasRenderingContext2D.prototype.revert = function() {
 // Set the graphics attributes specified by the properties of the object o.
 // Or, if no argument is passed, return the current attributes as an object.
 // Note that this does not handle the transformation or clipping region.
-CanvasRenderingContext2D.prototype.attrs = function(o) {
+CanvasRenderingContext2D.prototype.attrs = function (o) {
     if (o) {
-        for(var a in o)       // For each property in o
+        for (var a in o)       // For each property in o
             this[a] = o[a];   // Set it as a graphics attribute
         return this;          // Enable method chaining
     }

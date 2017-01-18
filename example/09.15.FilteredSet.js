@@ -7,16 +7,16 @@ var FilteredSet = Set.extend(
     function FilteredSet(set, filter) {  // The constructor
         this.set = set;
         this.filter = filter;
-    }, 
+    },
     {  // The instance methods
-        add: function() {
+        add: function () {
             // If we have a filter, apply it
             if (this.filter) {
-                for(var i = 0; i < arguments.length; i++) {
+                for (var i = 0; i < arguments.length; i++) {
                     var v = arguments[i];
                     if (!this.filter(v))
                         throw new Error("FilteredSet: value " + v +
-                                        " rejected by filter");
+                            " rejected by filter");
                 }
             }
 
@@ -25,11 +25,17 @@ var FilteredSet = Set.extend(
             return this;
         },
         // The rest of the methods just forward to this.set and do nothing else.
-        remove: function() {
+        remove: function () {
             this.set.remove.apply(this.set, arguments);
             return this;
         },
-        contains: function(v) { return this.set.contains(v); },
-        size: function() { return this.set.size(); },
-        foreach: function(f,c) { this.set.foreach(f,c); }
+        contains: function (v) {
+            return this.set.contains(v);
+        },
+        size: function () {
+            return this.set.size();
+        },
+        foreach: function (f, c) {
+            this.set.foreach(f, c);
+        }
     });

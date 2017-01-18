@@ -4,12 +4,12 @@ function postFormData(url, data, callback) {
 
     var request = new XMLHttpRequest();            // New HTTP request
     request.open("POST", url);                     // POST to the specified url
-    request.onreadystatechange = function() {      // A simple event handler.
+    request.onreadystatechange = function () {      // A simple event handler.
         if (request.readyState === 4 && callback)  // When response is complete
             callback(request);                     // ...call the callback.
     };
     var formdata = new FormData();
-    for(var name in data) {
+    for (var name in data) {
         if (!data.hasOwnProperty(name)) continue;  // Skip inherited properties
         var value = data[name];
         if (typeof value === "function") continue; // Skip methods
@@ -20,5 +20,5 @@ function postFormData(url, data, callback) {
     // Send the name/value pairs in a multipart/form-data request body. Each
     // pair is one part of the request. Note that send automatically sets
     // the Content-Type header when you pass it a FormData object
-    request.send(formdata);  
+    request.send(formdata);
 }

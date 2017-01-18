@@ -1,9 +1,9 @@
 // Encode what, where, and radius in an XML document and post them to the 
 // specified url, invoking callback when the response is received
 function postQuery(url, what, where, radius, callback) {
-    var request = new XMLHttpRequest();            
+    var request = new XMLHttpRequest();
     request.open("POST", url);                  // POST to the specified url
-    request.onreadystatechange = function() {   // Simple event handler
+    request.onreadystatechange = function () {   // Simple event handler
         if (request.readyState === 4 && callback) callback(request);
     };
 
@@ -18,5 +18,5 @@ function postQuery(url, what, where, radius, callback) {
 
     // Now send the XML-encoded data to the server.
     // Note that the Content-Type will be automatically set.
-    request.send(doc); 
+    request.send(doc);
 }

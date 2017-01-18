@@ -11,4 +11,6 @@ function onLoad(f) {
 // Start by setting a flag that indicates that the document is not loaded yet.
 onLoad.loaded = false;
 // And register a function to set the flag when the document does load.
-onLoad(function() { onLoad.loaded = true; });
+onLoad(function () {
+    onLoad.loaded = true;
+});

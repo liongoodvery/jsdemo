@@ -4,7 +4,7 @@
 // The rectangle is specified in the default coordinate system.
 function smear(c, n, x, y, w, h) {
     // Get the ImageData object that represents the rectangle of pixels to smear
-    var pixels = c.getImageData(x,y,w,h);
+    var pixels = c.getImageData(x, y, w, h);
 
     // This smear is done in-place and requires only the source ImageData.
     // Some image processing algorithms require an additional ImageData to
@@ -22,15 +22,15 @@ function smear(c, n, x, y, w, h) {
 
     // Each pixel after the first in each row is smeared by replacing it with
     // 1/nth of its own value plus m/nths of the previous pixel's value
-    var m = n-1;
+    var m = n - 1;
 
-    for(var row = 0; row < height; row++) {  // For each row
-        var i = row*width*4 + 4;  // The offset of the second pixel of the row
-        for(var col = 1; col < width; col++, i += 4) { // For each column
-            data[i] =   (data[i] + data[i-4]*m)/n;     // Red pixel component
-            data[i+1] = (data[i+1] + data[i-3]*m)/n;   // Green
-            data[i+2] = (data[i+2] + data[i-2]*m)/n;   // Blue
-            data[i+3] = (data[i+3] + data[i-1]*m)/n;   // Alpha component
+    for (var row = 0; row < height; row++) {  // For each row
+        var i = row * width * 4 + 4;  // The offset of the second pixel of the row
+        for (var col = 1; col < width; col++, i += 4) { // For each column
+            data[i] = (data[i] + data[i - 4] * m) / n;     // Red pixel component
+            data[i + 1] = (data[i + 1] + data[i - 3] * m) / n;   // Green
+            data[i + 2] = (data[i + 2] + data[i - 2] * m) / n;   // Blue
+            data[i + 3] = (data[i + 3] + data[i - 1] * m) / n;   // Alpha component
         }
     }
 

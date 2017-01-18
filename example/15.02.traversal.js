@@ -2,11 +2,11 @@
  * Return the nth ancestor of e, or null if there is no such ancestor
  * or if that ancestor is not an Element (a Document or DocumentFragment e.g.).
  * If n is 0 return e itself.  If n is 1 (or
- * omitted) return the parent.  If n is 2, return the grandparent, etc.  
+ * omitted) return the parent.  If n is 2, return the grandparent, etc.
  */
 function parent(e, n) {
     if (n === undefined) n = 1;
-    while(n-- && e) e = e.parentNode;
+    while (n-- && e) e = e.parentNode;
     if (!e || e.nodeType !== 1) return null;
     return e;
 }
@@ -17,12 +17,12 @@ function parent(e, n) {
  * If n is negative, return the -nth previous sibling element.
  * If n is zero, return e itself.
  */
-function sibling(e,n) {
-    while(e && n !== 0) {  // If e is not defined we just return it
+function sibling(e, n) {
+    while (e && n !== 0) {  // If e is not defined we just return it
         if (n > 0) {  // Find next element sibling
             if (e.nextElementSibling) e = e.nextElementSibling;
             else {
-                for(e=e.nextSibling; e && e.nodeType !== 1; e=e.nextSibling)
+                for (e = e.nextSibling; e && e.nodeType !== 1; e = e.nextSibling)
                     /* empty loop */ ;
             }
             n--;
@@ -30,7 +30,7 @@ function sibling(e,n) {
         else {        // Find the previous element sibling
             if (e.previousElementSibing) e = e.previousElementSibling;
             else {
-                for(e=e.previousSibling; e&&e.nodeType!==1; e=e.previousSibling)
+                for (e = e.previousSibling; e && e.nodeType !== 1; e = e.previousSibling)
                     /* empty loop */ ;
             }
             n++;
@@ -57,7 +57,7 @@ function child(e, n) {
         // Find the first child element of e
         if (e.firstElementChild) e = e.firstElementChild;
         else {
-            for(e = e.firstChild; e && e.nodeType !== 1; e = e.nextSibling)
+            for (e = e.firstChild; e && e.nodeType !== 1; e = e.nextSibling)
                 /* empty */;
         }
         return sibling(e, n); // Return the nth sibling of the first child
@@ -65,9 +65,9 @@ function child(e, n) {
     else { // n is negative, so count backwards from the end
         if (e.lastElementChild) e = e.lastElementChild;
         else {
-            for(e = e.lastChild; e && e.nodeType !== 1; e=e.previousSibling)
+            for (e = e.lastChild; e && e.nodeType !== 1; e = e.previousSibling)
                 /* empty */;
         }
-        return sibling(e, n+1); // +1 to convert child -1 to sib 0 of last
+        return sibling(e, n + 1); // +1 to convert child -1 to sib 0 of last
     }
 }

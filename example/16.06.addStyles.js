@@ -14,19 +14,19 @@ function addStyles(styles) {
         styleElt = document.createElement("style"); // New <style> element
         head.appendChild(styleElt);                 // Insert it into <head>
         // Now the new stylesheet should be the last one
-        styleSheet = document.styleSheets[document.styleSheets.length-1]
+        styleSheet = document.styleSheets[document.styleSheets.length - 1]
     }
 
     // Now insert the styles into it
     if (typeof styles === "string") {
         // The argument is stylesheet text
-        if (styleElt) styleElt.innerHTML = styles; 
+        if (styleElt) styleElt.innerHTML = styles;
         else styleSheet.cssText = styles;           // The IE API
     }
     else {
         // The argument is an object of individual rules to insert
         var i = 0;
-        for(selector in styles) {
+        for (selector in styles) {
             if (styleSheet.insertRule) {
                 var rule = selector + " {" + styles[selector] + "}";
                 styleSheet.insertRule(rule, i++);

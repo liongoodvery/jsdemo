@@ -3,7 +3,7 @@
  */
 
 // Import the Swing GUI components and a few other classes
-importPackage(javax.swing); 
+importPackage(javax.swing);
 importClass(javax.swing.border.EmptyBorder);
 importClass(java.awt.event.ActionListener);
 importClass(java.net.URL);
@@ -17,7 +17,7 @@ var button = new JButton("Download");            // Button to start download
 var filechooser = new JFileChooser();            // A file selection dialog
 var row = Box.createHorizontalBox();             // A box for field and button
 var col = Box.createVerticalBox();               // For the row & progress bars
-var padding = new EmptyBorder(3,3,3,3);          // Padding for rows
+var padding = new EmptyBorder(3, 3, 3, 3);          // Padding for rows
 
 // Put them all together and display the GUI
 row.add(urlfield);                               // Input field goes in the row
@@ -29,14 +29,14 @@ frame.pack();                                    // Set to minimum size
 frame.visible = true;                            // Make the window visible
 
 // When anything happens to the window, call this function.
-frame.addWindowListener(function(e, name) {
+frame.addWindowListener(function (e, name) {
     // If the user closes the window, exit the application.
     if (name === "windowClosing")                // Rhino adds the name argument
         java.lang.System.exit(0);
 });
 
 // When the user clicks the button, call this function
-button.addActionListener(function() {
+button.addActionListener(function () {
     try {
         // Create a java.net.URL to represent the source URL.
         // (This will check that the user's input is well-formed)
@@ -48,11 +48,13 @@ button.addActionListener(function() {
         // Otherwise, get the java.io.File that represents the destination file
         var file = filechooser.getSelectedFile();
         // Now start a new thread to download the url
-        new java.lang.Thread(function() { download(url,file); }).start();
-    }    catch(e) {
+        new java.lang.Thread(function () {
+            download(url, file);
+        }).start();
+    } catch (e) {
         // Display a dialog box if anything goes wrong
         JOptionPane.showMessageDialog(frame, e.message, "Exception",
-                                     JOptionPane.ERROR_MESSAGE);
+            JOptionPane.ERROR_MESSAGE);
     }
 });
 
@@ -75,7 +77,7 @@ function download(url, file) {
         frame.pack();                            // Resize window
 
         // We don't yet know the URL size, so bar starts just animating
-        bar.indeterminate = true; 
+        bar.indeterminate = true;
 
         // Now connect to the server and get the URL length if we can
         var conn = url.openConnection();         // Get java.net.URLConnection
@@ -89,19 +91,19 @@ function download(url, file) {
         // Get input and output streams
         var input = conn.inputStream;            // To read bytes from server
         var output = new FileOutputStream(file); // To write bytes to file
-        
+
         // Create an array of 4k bytes as an input buffer
         var buffer = java.lang.reflect.Array.newInstance(java.lang.Byte.TYPE,
-                                                         4096);
+            4096);
         var num;
-        while((num=input.read(buffer)) != -1) {  // Read and loop until EOF
+        while ((num = input.read(buffer)) != -1) {  // Read and loop until EOF
             output.write(buffer, 0, num);        // Write bytes to file
             bar.value += num;                    // Update progress bar
         }
         output.close();                          // Close streams when done
         input.close();
     }
-    catch(e) { // If anything goes wrong, display error in progress bar
+    catch (e) { // If anything goes wrong, display error in progress bar
         if (bar) {
             bar.indeterminate = false;           // Stop animating
             bar.string = e.toString();           // Replace filename with error

@@ -2,11 +2,11 @@
 // thread and can safely use the synchronous XMLHttpRequest API.
 // Messages are expected to be arrays of URLs. Synchronously fetch the
 // contents of each URL as a string and send back an array of those strings.
-onmessage = function(e) {
+onmessage = function (e) {
     var urls = e.data;   // Our input: the URLs to fetch
     var contents = [];   // Our output: the contents of those URLs
 
-    for(var i = 0; i < urls.length; i++) { 
+    for (var i = 0; i < urls.length; i++) {
         var url = urls[i];                 // For each URL
         var xhr = new XMLHttpRequest();    // Begin an HTTP request 
         xhr.open("GET", url, false);       // false makes this synchronous

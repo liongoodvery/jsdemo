@@ -4,7 +4,7 @@
 function getText(url, callback) {
     var request = new XMLHttpRequest();         // Create new request
     request.open("GET", url);                   // Specify URL to fetch
-    request.onreadystatechange = function() {   // Define event listener
+    request.onreadystatechange = function () {   // Define event listener
         // If the request is compete and was successful
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader("Content-Type");

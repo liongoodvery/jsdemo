@@ -6,7 +6,7 @@
 // Also event registration for message events is through the onmessage 
 // property only--this version does not define an addEventListener method.
 if (window.EventSource === undefined) {     // If EventSource is not defined,
-    window.EventSource = function(url) {    // emulate it like this.
+    window.EventSource = function (url) {    // emulate it like this.
         var xhr;                        // Our HTTP connection...
         var evtsrc = this;              // Used in the event handlers.
         var charsReceived = 0;          // So we can tell what is new.
@@ -18,13 +18,17 @@ if (window.EventSource === undefined) {     // If EventSource is not defined,
         var aborted = false;            // Set true to give up on connecting
 
         // Create an XHR object
-        xhr = new XMLHttpRequest(); 
+        xhr = new XMLHttpRequest();
 
         // Define an event handler for it
-        xhr.onreadystatechange = function() {
-            switch(xhr.readyState) {
-            case 3: processData(); break;   // When a chunk of data arrives
-            case 4: reconnect(); break;     // When the request closes
+        xhr.onreadystatechange = function () {
+            switch (xhr.readyState) {
+                case 3:
+                    processData();
+                    break;   // When a chunk of data arrives
+                case 4:
+                    reconnect();
+                    break;     // When the request closes
             }
         };
 
@@ -40,7 +44,7 @@ if (window.EventSource === undefined) {     // If EventSource is not defined,
 
         // This is how we establish a connection
         function connect() {
-            charsReceived = 0; 
+            charsReceived = 0;
             type = null;
             xhr.open("GET", url);
             xhr.setRequestHeader("Cache-Control", "no-cache");
@@ -56,7 +60,7 @@ if (window.EventSource === undefined) {     // If EventSource is not defined,
                 if (type !== "text/event-stream") {
                     aborted = true;
                     xhr.abort();
-                    return; 
+                    return;
                 }
             }
             // Keep track of how much we've received and get only the
@@ -66,29 +70,38 @@ if (window.EventSource === undefined) {     // If EventSource is not defined,
 
             // Break the chunk of text into lines and iterate over them.
             var lines = chunk.replace(/(\r\n|\r|\n)$/, "").split(/\r\n|\r|\n/);
-            for(var i = 0; i < lines.length; i++) {
-                var line = lines[i], pos = line.indexOf(":"), name, value="";
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i], pos = line.indexOf(":"), name, value = "";
                 if (pos == 0) continue;               // Ignore comments
                 if (pos > 0) {                        // field name:value
-                    name = line.substring(0,pos);
-                    value = line.substring(pos+1);
+                    name = line.substring(0, pos);
+                    value = line.substring(pos + 1);
                     if (value.charAt(0) == " ") value = value.substring(1);
                 }
                 else name = line;                     // field name only
 
-                switch(name) {
-                case "event": eventName = value; break;
-                case "data": data += value + "\n"; break;
-                case "id": lastEventId = value; break;
-                case "retry": retrydelay = parseInt(value) || 1000; break; 
-                default: break;  // Ignore any other line
+                switch (name) {
+                    case "event":
+                        eventName = value;
+                        break;
+                    case "data":
+                        data += value + "\n";
+                        break;
+                    case "id":
+                        lastEventId = value;
+                        break;
+                    case "retry":
+                        retrydelay = parseInt(value) || 1000;
+                        break;
+                    default:
+                        break;  // Ignore any other line
                 }
 
                 if (line === "") {  // A blank line means send the event
                     if (evtsrc.onmessage && data !== "") {
                         // Chop trailing newline if there is one
-                        if (data.charAt(data.length-1) == "\n")
-                            data = data.substring(0, data.length-1);
+                        if (data.charAt(data.length - 1) == "\n")
+                            data = data.substring(0, data.length - 1);
                         evtsrc.onmessage({    // This is a fake Event object
                             type: eventName,  // event type
                             data: data,       // event data

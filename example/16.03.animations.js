@@ -20,20 +20,20 @@ function shake(e, oncomplete, distance, time) {
     // Otherwise, it updates e's position and schedules itself to run again.
     function animate() {
         var now = (new Date()).getTime();     // Get current time
-        var elapsed = now-start;              // How long since we started
-        var fraction = elapsed/time;          // What fraction of total time?
+        var elapsed = now - start;              // How long since we started
+        var fraction = elapsed / time;          // What fraction of total time?
 
         if (fraction < 1) {     // If the animation is not yet complete
             // Compute the x position of e as a function of animation
             // completion fraction. We use a sinusoidal function, and multiply
             // the completion fraction by 4pi, so that it shakes back and
             // forth twice.
-            var x = distance * Math.sin(fraction*4*Math.PI);
+            var x = distance * Math.sin(fraction * 4 * Math.PI);
             e.style.left = x + "px";
 
             // Try to run again in 25ms or at the end of the total time.
             // We're aiming for a smooth 40 frames/second animation.
-            setTimeout(animate, Math.min(25, time-elapsed));
+            setTimeout(animate, Math.min(25, time - elapsed));
         }
         else {                  // Otherwise, the animation is complete
             e.style.cssText = originalStyle  // Restore the original style
@@ -60,13 +60,13 @@ function fadeOut(e, oncomplete, time) {
     animate();                             // And start animating
 
     function animate() {
-        var elapsed = (new Date()).getTime()-start; // elapsed time
-        var fraction = elapsed/time;                // As a fraction of total
+        var elapsed = (new Date()).getTime() - start; // elapsed time
+        var fraction = elapsed / time;                // As a fraction of total
         if (fraction < 1) {     // If the animation is not yet complete
             var opacity = 1 - ease(fraction);  // Compute element opacity
             e.style.opacity = String(opacity); // Set it on e  
             setTimeout(animate,                // Schedule another frame
-                       Math.min(25, time-elapsed));
+                Math.min(25, time - elapsed));
         }
         else {                  // Otherwise, we're done
             e.style.opacity = "0";          // Make e fully transparent
