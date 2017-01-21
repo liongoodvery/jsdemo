@@ -1,42 +1,40 @@
-// range.js: A class representing a range of values.  
+// Sort the rows in first <tbody> of the specified table according to
+// the value of nth cell within each row. Use the comparator function
+// if one is specified. Otherwise, compare the values alphabetically.
+function sortrows(table, n, comparator) {
+    var tbody = table.tBodies[0]; // First <tbody>; may be implicitly created
+    var rows = tbody.getElementsByTagName("tr"); // All rows in the tbody
+    rows = Array.prototype.slice.call(rows, 0);   // Snapshot in a true array
 
-// This is a factory function that returns a new range object.
-function range(from, to) {
-    // Use the inherit() function to create an object that inherits from the
-    // prototype object defined below.  The prototype object is stored as
-    // a property of this function, and defines the shared methods (behavior)
-    // for all range objects.
-    var r = inherit(range.methods);
+    // Now sort the rows based on the text in the nth <td> element
+    rows.sort(function (row1, row2) {
+        var cell1 = row1.getElementsByTagName("td")[n];  // Get nth cell
+        var cell2 = row2.getElementsByTagName("td")[n];  // of both rows
+        var val1 = cell1.textContent || cell1.innerText; // Get text content
+        var val2 = cell2.textContent || cell2.innerText; // of the two cells
+        if (comparator) return comparator(val1, val2);   // Compare them!
+        if (val1 < val2) return -1;
+        else if (val1 > val2) return 1;
+        else return 0;
+    });
 
-    // Store the start and end points (state) of this new range object.
-    // These are noninherited properties that are unique to this object.
-    r.from = from;
-    r.to = to;
-
-    // Finally return the new object
-    return r;
+    // Now append the rows into the tbody in their sorted order.
+    // This automatically moves them from their current location, so there
+    // is no need to remove them first. If the <tbody> contains any
+    // nodes other than <tr> elements, those nodes will float to the top.
+    for (var i = 0; i < rows.length; i++) tbody.appendChild(rows[i]);
 }
 
-// This prototype object defines methods inherited by all range objects.
-range.methods = {
-    // Return true if x is in the range, false otherwise
-    // This method works for textual and Date ranges as well as numeric.
-    includes: function (x) {
-        return this.from <= x && x <= this.to;
-    },
-    // Invoke f once for each integer in the range.
-    // This method works only for numeric ranges.
-    foreach: function (f) {
-        for (var x = Math.ceil(this.from); x <= this.to; x++) f(x);
-    },
-    // Return a string representation of the range
-    toString: function () {
-        return "(" + this.from + "..." + this.to + ")";
+// Find the <th> elements of the table (assuming there is only one row of them)
+// and make them clickable so that clicking on a column header sorts
+// by that column.
+function makeSortable(table) {
+    var headers = table.getElementsByTagName("th");
+    for (var i = 0; i < headers.length; i++) {
+        (function (n) {  // Nested funtion to create a local scope
+            headers[i].onclick = function () {
+                sortrows(table, n);
+            };
+        }(i));          // Assign value of i to the local variable n
     }
-};
-
-// Here are example uses of a range object.
-var r = range(1, 3);      // Create a range object
-r.includes(2);           // => true: 2 is in the range
-r.foreach(console.log);  // Prints 1 2 3
-console.log(r.toString());          // Prints (1...3)
+}
