@@ -49,3 +49,113 @@ lion.reverse = function (node) {
     }
     node.appendChild(f)
 }
+
+// This module defines Element.insertAdjacentHTML for browsers that don't
+// support it, and also defines portable HTML insertion functions that have
+// more logical names than insertAdjacentHTML:
+//     Insert.before(), Insert.after(), Insert.atStart(), Insert.atEnd()
+lion.insert = (function () {
+    // If elements have a native insertAdjacentHTML, use it in four HTML
+    // insertion functions with more sensible names.
+    if (document.createElement("div").insertAdjacentHTML) {
+        return {
+            before: function (e, h) {
+                e.insertAdjacentHTML("beforebegin", h);
+            },
+            after: function (e, h) {
+                e.insertAdjacentHTML("afterend", h);
+            },
+            atStart: function (e, h) {
+                e.insertAdjacentHTML("afterbegin", h);
+            },
+            atEnd: function (e, h) {
+                e.insertAdjacentHTML("beforeend", h);
+            }
+        };
+    }
+
+    // Otherwise, we have no native insertAdjacentHTML. Implement the same
+    // four insertion functions and then use them to define insertAdjacentHTML.
+
+    // First, define a utility method that takes a string of HTML and returns
+    // a DocumentFragment containing the parsed representation of that HTML.
+    function fragment(html) {
+        var elt = document.createElement("div");      // Create empty element
+        var frag = document.createDocumentFragment(); // Create empty fragment
+        elt.innerHTML = html;                         // Set element content
+        while (elt.firstChild)                         // Move all nodes
+            frag.appendChild(elt.firstChild);         //    from elt to frag
+        return frag;                                  // And return the frag
+    }
+
+    var Insert = {
+        before: function (elt, html) {
+            elt.parentNode.insertBefore(fragment(html), elt);
+        },
+        after: function (elt, html) {
+            elt.parentNode.insertBefore(fragment(html), elt.nextSibling);
+        },
+        atStart: function (elt, html) {
+            elt.insertBefore(fragment(html), elt.firstChild);
+        },
+        atEnd: function (elt, html) {
+            elt.appendChild(fragment(html));
+        }
+    };
+
+    // Now implement insertAdjacentHTML based on the functions above
+    Element.prototype.insertAdjacentHTML = function (pos, html) {
+        switch (pos.toLowerCase()) {
+            case "beforebegin":
+                return Insert.before(this, html);
+            case "afterend":
+                return Insert.after(this, html);
+            case "afterbegin":
+                return Insert.atStart(this, html);
+            case "beforeend":
+                return Insert.atEnd(this, html);
+        }
+    };
+    return Insert;  // Finally return the four insertion function
+}());
+
+// Return the current scrollbar offsets as the x and y properties of an object
+lion.getScrollOffsets = function (w) {
+    // Use the specified window or the current window if no argument
+    w = w || window;
+
+    // This works for all browsers except IE versions 8 and before
+    if (w.pageXOffset != null) return {x: w.pageXOffset, y: w.pageYOffset};
+
+    // For IE (or any browser) in Standards mode
+    var d = w.document;
+    if (document.compatMode == "CSS1Compat")
+        return {x: d.documentElement.scrollLeft, y: d.documentElement.scrollTop};
+
+    // For browsers in Quirks mode
+    return {x: d.body.scrollLeft, y: d.body.scrollTop};
+}
+
+
+// Return the viewport size as w and h properties of an object
+lion.getViewportSize = function (w) {
+    // Use the specified window or the current window if no argument
+    w = w || window;
+
+    // This works for all browsers except IE8 and before
+    if (w.innerWidth != null) return {w: w.innerWidth, h: w.innerHeight};
+
+    // For IE (or any browser) in Standards mode
+    var d = w.document;
+    if (document.compatMode == "CSS1Compat")        return {
+        w: d.documentElement.clientWidth,
+        h: d.documentElement.clientHeight
+    };
+
+    // For browsers in Quirks mode
+    return {w: d.body.clientWidth, h: d.body.clientWidth};
+}
+
+
+
+

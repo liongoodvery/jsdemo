@@ -5,45 +5,43 @@
     <script src="lib.js"></script>
     <script src="test.js"></script>
     <script src="stub.js"></script>
+    <link href="test.css" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=2.0, maximum-scale=2.0, user-scalable=1">
     <script>
-        var sp = {}
+        var s = {};
+
         window.onload = function () {
-            sp.abc = document.getElementById("abc");
-            sp.p = document.getElementsByTagName("p")[0]
-            sp.newp = sp.p.cloneNode(true)
-            sp.getp = function () {
-                return sp.p.cloneNode(true)
-            }
-            sp.t=document.getElementsByTagName("table")[0]
-            makeSortable(sp.t)
         }
     </script>
-    <link href="test.css" type="text/css" rel="stylesheet"/>
     <title>Test</title>
 </head>
 <body>
 <div id="abc">id</div>
 <p>what is your name?</p>
-<table>
 
-    <tr>
-        <td>3</td>
-        <td>2</td>
 
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>8</td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>6</td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>7</td>
+<form method="get" name="test">
+    <select name="t_select">
+        <optgroup label="alpha">
+            <option>a</option>
+            <option>b</option>
+            <option>c</option>
+        </optgroup>
 
-    </tr>
-</table>
+        <optgroup label="belta">
+            <option>a</option>
+            <option>b</option>
+            <option>c</option>
+        </optgroup>
+
+    </select>
+    <input type="button" value="abc">
+
+    <textarea name="hobby">
+
+    </textarea>
+    <input type="text" onclick="">
+    <input type="submit">
+</form>
 </body>
 </html>
