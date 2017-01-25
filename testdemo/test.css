@@ -14,3 +14,6 @@ td{
 input{
     display: block;
 }
+#c_p{
+    display: inline-block;
+}
