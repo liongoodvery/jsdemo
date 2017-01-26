@@ -7,10 +7,12 @@
 // @include       http://*
 // @include     https://*
 // @include     file://*
+// @exclude   file:///C:/Projects/idea/jsdemo/*
 // @grant        none
 // ==/UserScript==
 
-var lion = lion || {};
+window.lion = window.lion || {};
+window.lion.config = {};
 lion.urlArgs = function () {
     var args = {};                             // Start with an empty object
     var query = location.search.substring(1);  // Get query string, minus '?'
@@ -45,9 +47,9 @@ lion.inherit = function (p) {
 lion.reverse = function (node) {
     var f = document.createDocumentFragment();
     while (node.lastChild) {
-        f.appendChild(node.lastChild)
+        f.appendChild(node.lastChild);
     }
-    node.appendChild(f)
+    node.appendChild(f);
 };
 
 // This module defines Element.insertAdjacentHTML for browsers that don't
@@ -246,7 +248,7 @@ lion.scale = function (e, factor) {
 lion.scaleAll = function (factor) {
     factor = factor || 1;
     var list = document.querySelectorAll("*");
-    var len=list.length;
+    var len = list.length;
 
     for (var i = 0; i < len; ++i) {
         lion.scale(list.item(i), factor);
@@ -269,7 +271,261 @@ lion.scaleColor = function (e, factor) {
         e.style.backgroundColor = "rgba(" + components.join() + ")";
 };
 
+lion.nightMode = function () {
+    var list = document.querySelectorAll("*");
+    var len = list.length;
+
+    for (var i = 0; i < len; ++i) {
+        list.item(i).style.color = "#fff000";
+        list.item(i).style.backgroundColor = "#333333";
+    }
+};
+
+/*
+ * Return the classList property of e, if it has one.
+ * Otherwise, return an object that simulates the DOMTokenList API for e.
+ * The returned object has contains(), add(), remove(), toggle() and toString()
+ * methods for testing and altering the set of classes of the element e.
+ * If the classList property is natively supported, the returned object is
+ * array-like and has length and array index properties. The simulated
+ * DOMTokenList is not array-like, but has a toArray() method that returns
+ * a true-array snapshot of the element's class names.
+ */
+function classList(e) {
+    if (e.classList) return e.classList;   // Return e.classList if it exists
+    else return new CSSClassList(e);       // Otherwise try to fake it
+}
+
+// CSSClassList is a JavaScript class that simulates DOMTokenList
+function CSSClassList(e) {
+    this.e = e;
+}
+
+// Return true if e.className contains the class c, false otherwise
+CSSClassList.prototype.contains = function (c) {
+    // Check that c is a valid class name
+    if (c.length === 0 || c.indexOf(" ") != -1)
+        throw new Error("Invalid class name: '" + c + "'");
+    // Check common cases first
+    var classes = this.e.className;
+    if (!classes) return false;       // e has no classes at all
+    if (classes === c) return true;   // e has one class that matches exactly
+
+    // Otherwise, use a RegExp to search for c as a word by itself
+    // \b in a regular expression requires a match at a word boundary.
+    return classes.search("\\b" + c + "\\b") != -1;
+};
+
+// Add c to the e.className if it is not already present
+CSSClassList.prototype.add = function (c) {
+    if (this.contains(c)) return;            // Do nothing if already present
+    var classes = this.e.className;
+    if (classes && classes[classes.length - 1] != " ")
+        c = " " + c;                         // Add a space if we need one
+    this.e.className += c;                   // Add c to the className
+};
+
+// Remove all occurrences of c from e.className
+CSSClassList.prototype.remove = function (c) {
+    // Make sure c is a valid class name
+    if (c.length === 0 || c.indexOf(" ") != -1)
+        throw new Error("Invalid class name: '" + c + "'");
+    // Remove all occurances of c as a word, plus any trailing space
+    var pattern = new RegExp("\\b" + c + "\\b\\s*", "g");
+    this.e.className = this.e.className.replace(pattern, "");
+};
+
+// Add c to e.className if it is not already present and return true.
+// Otherwise, remove all occurrences of c from e.className and return false.
+CSSClassList.prototype.toggle = function (c) {
+    if (this.contains(c)) {  // If e.className contains c
+        this.remove(c);      // then remove it.
+        return false;
+    }
+    else {                   // Otherwise:
+        this.add(c);         // add it.
+        return true;
+    }
+};
+
+// Return e.className itself
+CSSClassList.prototype.toString = function () {
+    return this.e.className;
+};
+
+// Return of the names in e.className
+CSSClassList.prototype.toArray = function () {
+    return this.e.className.match(/\b\w+\b/g) || [];
+};
+
+lion.disableStylesheet = function (ss) {
+    if (typeof ss === "number") {
+        console.log(ss);
+        document.styleSheets[ss].disabled = true;
+    } else {
+        var sheets = document.querySelectorAll(ss);
+        var len = sheets.length;
+        for (var i = 0; i < len; ++i) {
+            sheets[i].disabled = true;
+        }
+
+    }
+};
+
+/**
+ * Drag.js: drag absolutely positioned HTML elements.
+ *
+ * This module defines a single drag() function that is designed to be called
+ * from an onmousedown event handler. Subsequent mousemove events will
+ * move the specified element. A mouseup event will terminate the drag.
+ * This implementation works with both the standard and IE event models.
+ * It requires the getScrollOffsets() function from elsewhere in this book.
+ *
+ * Arguments:
+ *
+ *   elementToDrag: the element that received the mousedown event or
+ *     some containing element. It must be absolutely positioned. Its
+ *     style.left and style.top values will be changed based on the user's
+ *     drag.
+ *
+ *   event: the Event object for the mousedown event.
+ **/
+lion.drag = function (elementToDrag, event) {
+    // The initial mouse position, converted to document coordinates
+    var scroll = lion.getScrollOffsets();  // A utility function from elsewhere
+    var startX = event.clientX + scroll.x;
+    var startY = event.clientY + scroll.y;
+
+    // The original position (in document coordinates) of the element
+    // that is going to be dragged.  Since elementToDrag is absolutely
+    // positioned, we assume that its offsetParent is the document body.
+    var origX = elementToDrag.offsetLeft;
+    var origY = elementToDrag.offsetTop;
+
+    // Compute the distance between the mouse down event and the upper-left
+    // corner of the element. We'll maintain this distance as the mouse moves.
+    var deltaX = startX - origX;
+    var deltaY = startY - origY;
+
+    // Register the event handlers that will respond to the mousemove events
+    // and the mouseup event that follow this mousedown event.
+    if (document.addEventListener) {  // Standard event model
+        // Register capturing event handlers on the document
+        document.addEventListener("mousemove", moveHandler, true);
+        document.addEventListener("mouseup", upHandler, true);
+    }
+    else if (document.attachEvent) {  // IE Event Model for IE5-8
+        // In the IE event model, we capture events by calling
+        // setCapture() on the element to capture them.
+        elementToDrag.setCapture();
+        elementToDrag.attachEvent("onmousemove", moveHandler);
+        elementToDrag.attachEvent("onmouseup", upHandler);
+        // Treat loss of mouse capture as a mouseup event.
+        elementToDrag.attachEvent("onlosecapture", upHandler);
+    }
+
+    // We've handled this event. Don't let anybody else see it.
+    if (event.stopPropagation) event.stopPropagation();  // Standard model
+    else event.cancelBubble = true;                      // IE
+
+    // Now prevent any default action.
+    if (event.preventDefault) event.preventDefault();   // Standard model
+    else event.returnValue = false;                     // IE
+
+    /**
+     * This is the handler that captures mousemove events when an element
+     * is being dragged. It is responsible for moving the element.
+     **/
+    function moveHandler(e) {
+        if (!e) e = window.event;  // IE event Model
+
+        // Move the element to the current mouse position, adjusted by the
+        // position of the scrollbars and the offset of the initial click.
+        var scroll = lion.getScrollOffsets();
+        elementToDrag.style.left = (e.clientX + scroll.x - deltaX) + "px";
+        elementToDrag.style.top = (e.clientY + scroll.y - deltaY) + "px";
+
+        // And don't let anyone else see this event.
+        if (e.stopPropagation) e.stopPropagation();  // Standard
+        else e.cancelBubble = true;                  // IE
+    }
+
+    /**
+     * This is the handler that captures the final mouseup event that
+     * occurs at the end of a drag.
+     **/
+    function upHandler(e) {
+        if (!e) e = window.event;  // IE Event Model
+
+        // Unregister the capturing event handlers.
+        if (document.removeEventListener) {  // DOM event model
+            document.removeEventListener("mouseup", upHandler, true);
+            document.removeEventListener("mousemove", moveHandler, true);
+        }
+        else if (document.detachEvent) {  // IE 5+ Event Model
+            elementToDrag.detachEvent("onlosecapture", upHandler);
+            elementToDrag.detachEvent("onmouseup", upHandler);
+            elementToDrag.detachEvent("onmousemove", moveHandler);
+            elementToDrag.releaseCapture();
+        }
+
+        // And don't let the event propagate any further.
+        if (e.stopPropagation) e.stopPropagation();  // Standard model
+        else e.cancelBubble = true;                  // IE
+    }
+};
 
 
+/*
+ * Pass a function to whenReady() and it will be invoked (as a method of the
+ * document) when the document is parsed and ready for manipulation. Registered
+ * functions are triggered by the first DOMContentLoaded, readystatechange, or
+ * load event that occurs. Once the document is ready and all functions have
+ * been invoked, any functions passed to whenReady() will be invoked
+ * immediately.
+ */
+lion.whenReady = (function () { // This function returns the whenReady() function
+    var funcs = [];    // The functions to run when we get an event
+    var ready = false; // Switches to true when the handler is triggered
+
+    // The event handler invoked when the document becomes ready
+    function handler(e) {
+        // If we've already run once, just return
+        if (ready) return;
+
+        // If this was a readystatechange event where the state changed to
+        // something other than "complete", then we're not ready yet
+        if (e.type === "readystatechange" && document.readyState !== "complete")
+            return;
+
+        // Run all registered functions.
+        // Note that we look up funcs.length each time, in case calling
+        // one of these functions causes more functions to be registered.
+        for (var i = 0; i < funcs.length; i++)
+            funcs[i].call(document);
+
+        // Now set the ready flag to true and forget the functions
+        ready = true;
+        funcs = null;
+    }
+
+    // Register the handler for any event we might receive
+    if (document.addEventListener) {
+        document.addEventListener("DOMContentLoaded", handler, false);
+        document.addEventListener("readystatechange", handler, false);
+        window.addEventListener("load", handler, false);
+    }
+    else if (document.attachEvent) {
+        document.attachEvent("onreadystatechange", handler);
+        window.attachEvent("onload", handler);
+    }
+
+    // Return the whenReady function
+    return function (f) {
+        if (ready) f.call(document); // If already ready, just run it
+        else funcs.push(f);          // Otherwise, queue it for later.
+    }
+}());
+var l = lion;
 
 

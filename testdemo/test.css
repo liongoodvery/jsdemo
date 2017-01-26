@@ -1,6 +1,5 @@
-#abc{
-    height: 20px;
-    background: red;
+#c_div{
+    background: #ff0088;opacity: .5;
 }
 
 
@@ -15,5 +14,15 @@ input{
     display: block;
 }
 #c_p{
-    display: inline-block;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+}
+
+.b_red{
+    background-color: green;
+    opacity: .5;
+}
+.f_green{
+    color: yellow;
 }

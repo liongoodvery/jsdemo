@@ -9,18 +9,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=2.0, maximum-scale=2.0, user-scalable=1">
     <script>
         var s = {};
-
-        window.onload = function () {
+        var d;
+        var load = function () {
             s.div = document.getElementById("c_div");
             s.p = document.getElementById("c_p");
-        }
+            d = document;
+            var clist = s.p.classList;
+            clist.add('b_red');
+            clist.add('f_green');
+
+            s.p.onmousedown = function (e) {
+                lion.drag(this, e)
+            };
+
+            document.onwheel=function (e) {
+                console.log(e);
+            }
+        };
+        lion.whenReady(load)
+
     </script>
     <title>Test</title>
 </head>
 <body>
-<div id="c_div">id</div>
-<p id="c_p">what is your name?</p>
-
+<div id="c_div">
+    <p id="c_p">what is your name?</p>
+    id
+</div>
+</div>
 
 <form method="get" name="test">
     <select name="t_select">
