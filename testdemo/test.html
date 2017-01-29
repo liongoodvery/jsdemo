@@ -2,33 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link href="test.css" rel="stylesheet" type="text/css"/>
     <script src="lib.js"></script>
     <script src="test.js"></script>
-    <script src="stub.js"></script>
-    <link href="test.css" rel="stylesheet" type="text/css"/>
+    <script src="../jsroot/stub.js"></script>
+    <script src="./jquery-1.11.3.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=2.0, maximum-scale=2.0, user-scalable=1">
-    <script>
-        var s = {};
-        var d;
-        var load = function () {
-            s.div = document.getElementById("c_div");
-            s.p = document.getElementById("c_p");
-            d = document;
-            var clist = s.p.classList;
-            clist.add('b_red');
-            clist.add('f_green');
-
-            s.p.onmousedown = function (e) {
-                lion.drag(this, e)
-            };
-
-            document.onwheel=function (e) {
-                console.log(e);
-            }
-        };
-        lion.whenReady(load)
-
-    </script>
     <title>Test</title>
 </head>
 <body>
@@ -39,7 +18,7 @@
 </div>
 
 <form method="get" name="test">
-    <select name="t_select">
+    <select name="t_select" multiple>
         <optgroup label="alpha">
             <option>a</option>
             <option>b</option>
@@ -47,9 +26,9 @@
         </optgroup>
 
         <optgroup label="belta">
-            <option>a</option>
-            <option>b</option>
-            <option>c</option>
+            <option>d</option>
+            <option>e</option>
+            <option>f</option>
         </optgroup>
 
     </select>
@@ -58,8 +37,49 @@
     <textarea name="hobby">
 
     </textarea>
-    <input type="text" onclick="">
+    <input type="text">
+    <input type="checkbox" name="check">
+    <input type="checkbox" name="check1">
     <input type="submit">
 </form>
+
+
+<div id="append-to"></div>
+<table>
+    <tbody>
+
+    </tbody>
+</table>
 </body>
+
+
+<script>
+    var s = {};
+    s.div = document.getElementById("c_div");
+    s.p = document.getElementById("c_p");
+    var d = document;
+    var $div = $(s.div);
+    var $p = $(s.p);
+    var $scroll=$('#scroll')
+    var $tbody=$('tbody')
+    var $at=$('#append-to')
+    $at.append($('<p>').text('append'))
+    $at.prepend($('<p>').text('prepend'))
+    $at.before($('<p>').text('before'))
+    $at.after($('<p>').text('after'))
+    var $btn = $('input[type="button"]');
+    $btn.on('click',function () {
+        console.log(this);
+    })
+    $('input,textarea,select')
+        .change(function (event) {
+        console.log(event);
+    })
+        .focusin(function () {
+            console.log('focusin');
+        })
+        .focusout(function () {
+            console.log('focusout');
+        });
+</script>
 </html>

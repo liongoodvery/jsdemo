@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax</title>
+    <script src="getting_sets_using_relationships.js"></script>
+    <script src="../jsroot/stub.js"></script>
+    <link href="test.css" rel="stylesheet" type="text/css"/>
+    <script>
+        var s = {};
+        var ajax = function () {
+            console.log('ajax()');
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function (e) {
+                if (request.readyState===XMLHttpRequest.DONE&&request.status===200) {
+                    var headers = request.getAllResponseHeaders();
+                    console.log(request);
+                    
+                }
+            };
+            request.open("GET", "test.html");
+            request.send(null)
+        };
+        var load = function () {
+            s.b = document.getElementById('btn');
+            s.b.onclick = ajax;
+        };
+        lion.whenReady(load);
+    </script>
+</head>
+<body>
+<button id="btn"> button</button>
+</body>
+</html>

@@ -38,7 +38,7 @@ function pharseTable() {
     f.appendChild(tbo)
 
 
-    var trs = tbo.childNodes
+    var trs = tbo.children;
     len = trs.length
     for (var i = 0; i < len; ++i) {
         var row = trs[i]
